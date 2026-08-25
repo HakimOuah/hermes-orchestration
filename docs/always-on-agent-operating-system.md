@@ -117,7 +117,20 @@ A manager may detect a SponsorAI bug and dispatch a coding agent, detect a Shopi
 
 ### Opportunity Radar
 
-Continuously monitor market signals across sources such as TikTok, X, Reddit, Google Trends, Meta advertising, marketplaces, AliExpress and Shopify ecosystems.
+Continuously monitor market signals across sources such as **Trendtrack**, TikTok, X, Reddit, Google Trends, Meta advertising, marketplaces, AliExpress and Shopify ecosystems.
+
+**Trendtrack should be treated as a primary structured commerce-intelligence source**, because it already aggregates substantial data about stores, products and shops that appear to be scaling. Instead of recreating every signal from scratch, the Opportunity Radar should ingest Trendtrack data where accessible and correlate it with independent signals from other sources.
+
+Useful Trendtrack-derived signals may include:
+- stores showing rapid growth/scaling behavior
+- products gaining traction across stores
+- changes in store/product velocity
+- newly emerging stores
+- repeated products or categories appearing among scaling shops
+- advertising/creative activity where available
+- other structured commerce signals exposed by Trendtrack
+
+The objective is not to trust a single platform blindly. Trendtrack should act as a **high-value discovery layer**, while Hermes cross-validates promising candidates against independent evidence.
 
 Do not perform full product research on everything. Detect anomalies and emerging correlations first.
 
@@ -125,6 +138,7 @@ Example signal object:
 
 ```text
 Product / category
+Trendtrack scaling-store signal: strong
 Reddit mentions: +140%
 TikTok velocity: +80%
 Advertiser count: +35%
@@ -134,9 +148,23 @@ Supplier/order signal: +18%
 
 Only high-signal candidates should trigger the expensive product-research workflow.
 
+A particularly valuable pattern is **cross-source confirmation**:
+
+```text
+Trendtrack detects scaling shop/product
+        +
+Meta activity increasing
+        +
+search/social demand accelerating
+        +
+supplier signal improving
+        =
+high-priority opportunity candidate
+```
+
 ### Competitor Intelligence Agent
 
-Maintain a longitudinal competitor database.
+Maintain a longitudinal competitor database. Trendtrack can also seed and enrich this database by surfacing stores that are already demonstrating scaling signals.
 
 Track:
 - products
@@ -148,6 +176,7 @@ Track:
 - advertising activity
 - reviews
 - new launches
+- Trendtrack store/product signals
 
 Important events include rapid creative scaling and several unrelated stores launching the same product/category within a short period.
 
