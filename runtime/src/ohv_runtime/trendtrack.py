@@ -33,13 +33,21 @@ class TrendTrackClient:
         response.raise_for_status()
         return response.json()
 
-    def lookup(self, query: str) -> dict[str, Any]:
-        """Resolve a supplied brand/domain/handle before deeper requests.
+    def verify(self) -> dict[str, Any]:
+        """Verify API authentication with TrendTrack's unmetered identity route."""
+        return self.request("/v1/me")
 
-        TrendTrack's agent documentation recommends lookup first when a user
-        provides an identifiable brand/domain/handle/page id.
-        """
-        return self.request("/v1/lookup", params={"query": query})
+    def usage(self) -> dict[str, Any]:
+        """Read current API credit usage before metered market queries."""
+        return self.request("/v1/usage")
+
+    def freshness(self) -> dict[str, Any]:
+        """Check latest-ready data date before freshness-sensitive analytics."""
+        return self.request("/v1/system/freshness")
+
+    def lookup(self, query: str) -> dict[str, Any]:
+        """Resolve a supplied brand/domain/handle before deeper requests."""
+        return self.request("/v1/lookup", params={"q": query})
 
     def close(self) -> None:
         self.client.close()
