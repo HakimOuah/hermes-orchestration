@@ -1,0 +1,47 @@
+version: 0.1
+status: placeholder
+
+# These weights are intentionally provisional.
+# Replace them with the user's existing research criteria and later calibrate them from real outcomes.
+
+dimensions:
+  demand:
+    weight: 0.15
+    description: Strength and quality of demand evidence
+  competition:
+    weight: 0.12
+    description: Competitive intensity and room for differentiation
+  pain_or_desire:
+    weight: 0.15
+    description: Strength of the consumer problem or desire
+  margin:
+    weight: 0.15
+    description: Expected economics after realistic acquisition and operating costs
+  differentiation:
+    weight: 0.12
+    description: Ability to create a meaningful offer/positioning advantage
+  creative_potential:
+    weight: 0.10
+    description: Ability to demonstrate and market the product visually
+  gmc_safety:
+    weight: 0.10
+    description: Compatibility with current Google Merchant Center constraints
+  operational_risk:
+    weight: 0.06
+    description: Shipping, returns, fragility, supplier and support risk
+  evidence_quality:
+    weight: 0.05
+    description: Reliability and diversity of underlying evidence
+
+hard_gates:
+  - id: gmc_blocker
+    rule: reject_if_clear_gmc_or_policy_blocker
+  - id: economics
+    rule: reject_if_realistic_net_margin_below_target
+  - id: ip
+    rule: reject_if_trademark_or_ip_dependency_is_material
+
+calibration:
+  method: outcome_driven
+  notes: >-
+    Aggregate scores must not substitute for dimensional analysis. Weight changes should be versioned and justified by multiple experiments when possible.
