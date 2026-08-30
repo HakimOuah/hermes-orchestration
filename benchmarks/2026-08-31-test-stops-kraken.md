@@ -86,3 +86,53 @@ supposant une facturation au jeton.
   ce que Brand Search avait faussé.
 - `mineur-brandsearch` n'a pas été exercé (clé TrendTrack posée le 31/08, jamais appelée).
 - Le contradicteur tourne sur le même modèle que les workers : `delegation.model` est global.
+
+---
+
+# Addendum — 31/08, deuxième passage sur basse-cour
+
+Expérience destinée à mesurer la charge du worker : `delegation.model` repointé sur
+`gpt-5.6-sol` le temps d'un run, pour que la consommation du sous-agent tombe dans le même
+compteur.
+
+## Charge mesurée
+
+| | Orchestrateur seul | Orch. + worker | Worker |
+|---|---:|---:|---:|
+| Entrée fraîche | 57 392 | 98 224 | **40 832** |
+| Entrée relue en cache | 357 376 | 1 632 768 | **1 275 392** |
+| Sortie | 4 391 | 10 112 | **5 721** |
+| Appels API | 11 | 32 | **21** |
+| Total | 419 159 | 1 741 104 | **1 321 945** |
+
+Aux prix Kimi K3 (3 / 0,30 / 15 $ le million) : **worker 0,59 $**, orchestrateur 0,35 $. Une
+mission avec orchestrateur sur abonnement et worker sur K3 revient donc à **≈ 0,59 $**.
+
+Le worker consomme 3× l'orchestrateur, et l'essentiel est du cache relu — d'où l'importance du
+tarif cache-hit dans tout arbitrage de fournisseur.
+
+## Le résultat qui compte : le verdict s'est inversé
+
+Même niche, même chaîne, **verdict opposé** : `STOP` au premier passage, **`GO` au second**.
+Le second contredit aussi le verdict humain du 08/08.
+
+Motif rendu au second passage : *« page 1 partagée entre spécialistes établis, grandes enseignes,
+comparateur et contenu, sans domination d'un type unique »*. Exactement la même structure que
+Hakim décrit comme un **sandwich sans interstice** — lue comme une ouverture au lieu d'un verrou.
+
+**Confusion assumée dans le protocole :** deux choses ont changé entre les deux runs — le modèle
+du worker, et le prompt (au second, j'ai nommé les graines et imposé la requête SERP au lieu de
+laisser l'agent choisir). L'inversion n'est donc **pas attribuable au modèle**. C'est un défaut
+de conception d'expérience, à ne pas reproduire.
+
+## Diagnostic
+
+Ce n'est pas une défaillance de modèle, c'est une **règle manquante**. Rien dans les skills portés
+ne dit quand une page 1 mixte signifie « marché ouvert » et quand elle signifie « sandwich sans
+interstice ». Ce critère vit dans le jugement de Hakim et n'est écrit nulle part qu'un agent
+puisse lire.
+
+Conséquence : **n = 2 ne valait rien.** Les deux STOP corrects du premier passage n'étaient pas
+robustes — le troisième run sur l'un d'eux donne l'inverse. Aucun verdict ne doit être délégué
+avant que ce critère soit écrit et que la stabilité soit re-mesurée sur plusieurs passages de la
+même niche.
