@@ -177,3 +177,51 @@ sous-marchés réels, deux structures concurrentielles différentes, deux verdic
 **Rien ne spécifie comment choisir la requête décisive**, et c'est elle qui commande le verdict.
 C'est la prochaine règle à écrire, et elle est plus lourde que celle-ci : elle décide de ce qu'on
 regarde, pas de comment on le lit.
+
+---
+
+# Addendum 3 — la règle d'expédiabilité fait converger le choix de requête
+
+Après écriture de RULE-2026-003, l'agent choisit seul ses graines et sa requête décisive.
+
+**Il bascule sur « porte automatique poulailler » — la requête décisive de l'étude humaine du
+08/08.** Motif rendu : *« intention d'achat exacte correspondant à une fiche produit ; 8 100/mois,
+bande 17,70–210 € ; produit compact expédiable en colis standard »*. Et il écarte explicitement
+« poulailler 4 poules » pour *« hors gabarit et origine inconnue »*.
+
+La règle a donc produit exactement l'effet attendu : elle a retiré au panier son pouvoir de décider
+seul, et le choix de requête a convergé avec celui de Hakim sans que la réponse lui soit accessible.
+
+## Le contrat a corrigé l'erreur de chiffre
+
+Le champ `mot_cle_exact`, rendu obligatoire après le ×9 du passage précédent, a fonctionné :
+l'agent donne cette fois la chaîne précise. Vérification par `verifier-volumes.py` :
+
+| Mot-clé | Annoncé | Réel | |
+|---|---:|---:|---|
+| porte automatique poulailler | 8 100 | 8 100 | ✅ |
+| mangeoire poule anti nuisible | 4 400 | 4 400 | ✅ |
+| poulailler 4 poules | 8 100 | 8 100 | ✅ |
+| mangeoire poule | 9 900 | 9 900 | ✅ |
+| abreuvoir poule | 9 900 | 9 900 | ✅ |
+
+**5 sur 5.** Le passage précédent annonçait 4 400 pour « mangeoire anti-nuisible poules », qui en
+vaut 480 : deux chaînes différentes, deux volumes différents. Exiger la chaîne exacte a suffi.
+
+## Ce qui diverge encore, et le prochain trou
+
+Même requête que Hakim, **verdict différent** : `REVIEW` contre son `STOP`. Critère A compté
+2 acteurs grand public sur 8, là où son relevé du 08/08 montrait Leroy Merlin (238 offres),
+ManoMano et Cdiscount en haut de SERP. Trois semaines d'écart, ou un comptage différent — non
+tranché.
+
+**Trou probable sur le critère B.** Le prix plancher retenu est **17,70 €** pour une porte
+automatique de poulailler, dans une bande annoncée 17,70–210 €. Un écart de ×12 entre plancher et
+plafond signale que le plancher n'est pas comparable — c'est très probablement un accessoire ou une
+pièce, pas le produit. Or le skill dit déjà d'écarter « marques officielles, marques à récit, bas de
+gamme marketplace » et de se comparer au **concurrent comparable**.
+
+Conséquence si on n'y touche pas : le critère B deviendrait presque toujours bloquant, puisque rien
+de sourçable ne bat un plancher aberrant. **Le plancher doit être le plancher comparable, pas le
+plancher absolu** — c'est la prochaine règle à écrire, et elle est de la même famille que les trois
+précédentes : une distinction que Hakim fait sans effort et qui n'était écrite nulle part.
