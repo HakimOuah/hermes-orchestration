@@ -136,3 +136,44 @@ Conséquence : **n = 2 ne valait rien.** Les deux STOP corrects du premier passa
 robustes — le troisième run sur l'un d'eux donne l'inverse. Aucun verdict ne doit être délégué
 avant que ce critère soit écrit et que la stabilité soit re-mesurée sur plusieurs passages de la
 même niche.
+
+---
+
+# Addendum 2 — la règle écrite supprime l'instabilité
+
+Critère de verrou dicté par Hakim le 31/08, écrit dans `cartographie-concurrence`, porté vers
+Hermes, puis re-testé **en ne changeant qu'une variable** : même prompt et même configuration que
+le passage qui avait rendu `GO`.
+
+| Passage | Worker | Règle écrite | Critère A | Prix plancher | Verdict |
+|---|---|---|---|---|---|
+| 1 | grok-4.6 | non | — | — | `STOP` |
+| 2 | gpt-5.6-sol | non | — | — | `GO` |
+| 3 | gpt-5.6-sol | **oui** | 2/9 — NON | 99,99 € | **`REVIEW`** |
+| 4 | gpt-5.6-sol | **oui** | 2/9 — NON | 99,00 € | **`REVIEW`** |
+
+Les passages 3 et 4 sont identiques en tout point. Mêmes acteurs, même comptage, même verdict, un
+centime d'écart sur le plancher relevé.
+
+## Ce que ça démontre
+
+**L'instabilité ne venait pas du modèle, elle venait de la règle absente.** Tant que le critère
+restait interprétatif, deux passages pouvaient lire la même page 1 comme une ouverture ou comme un
+sandwich. Écrit sous forme de procédure déterminée — compter les acteurs grand public, comparer le
+plancher au coût rendu — le verdict devient reproductible.
+
+**Le `REVIEW` est plus juste que les deux verdicts précédents.** Le coût rendu du sourcing est
+inconnu ; aucun verdict n'était donc possible. `STOP` comme `GO` prétendaient conclure sans la
+donnée qui décide. La règle force l'agent à le dire au lieu de trancher.
+
+## Ce qui reste manquant
+
+La chaîne ne retrouve pas le `STOP` humain du 08/08, et la raison est identifiée : **la requête
+décisive n'est pas la même.** L'étude humaine portait sur « porte automatique poulailler » —
+l'angle accessoire, où Leroy Merlin aligne 238 offres. Les passages 3 et 4 portent sur « poulailler
+4 poules », le poulailler lui-même, dont la page 1 est tenue par des spécialistes. Deux
+sous-marchés réels, deux structures concurrentielles différentes, deux verdicts légitimes.
+
+**Rien ne spécifie comment choisir la requête décisive**, et c'est elle qui commande le verdict.
+C'est la prochaine règle à écrire, et elle est plus lourde que celle-ci : elle décide de ce qu'on
+regarde, pas de comment on le lit.
