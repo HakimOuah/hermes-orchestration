@@ -225,3 +225,40 @@ Conséquence si on n'y touche pas : le critère B deviendrait presque toujours b
 de sourçable ne bat un plancher aberrant. **Le plancher doit être le plancher comparable, pas le
 plancher absolu** — c'est la prochaine règle à écrire, et elle est de la même famille que les trois
 précédentes : une distinction que Hakim fait sans effort et qui n'était écrite nulle part.
+
+---
+
+# Addendum 4 — le plancher comparable corrige l'économie du dossier
+
+Après écriture de RULE-2026-004, même mission, même configuration.
+
+| | Avant la règle | Après |
+|---|---|---|
+| Plancher retenu | **17,70 €** | **149,00 €** |
+| Porteur du plancher | non dit | Portier Zen Farm autonome, porte aluminium Medium — Poulailler Direct |
+| Plafond | 210 € | 213 € |
+| Rapport plafond/plancher | **×12** | **×1,43** |
+| Exclus du calcul | non dit | trappes, supports, portiers incomplets ; bas de gamme marketplace ; enseignes ; marques officielles et à récit |
+
+**Le plancher passe de 17,70 € à 149 €.** Ce n'est pas un ajustement, c'est un dossier économique
+différent : à 17,70 € rien de sourçable ne tient, à 149 € il existe une bande exploitable. Le
+critère B rendait un verrou artificiel sur un accessoire mal identifié.
+
+Le rapport plafond/plancher tombe à 1,43, très en dessous du seuil de vraisemblance de ×4.
+
+Le verdict reste `REVIEW`, correctement — le coût rendu n'est toujours pas connu, et c'est lui qui
+décide.
+
+## Bilan des quatre règles
+
+Chacune est née d'une défaillance observée sur cette chaîne, a été écrite, portée, puis re-testée :
+
+| Règle | Défaillance qui l'a produite | Effet vérifié |
+|---|---|---|
+| 001 — seuil de dépense | Tuftéo coupé à 110 € sur un kit à 229 € | non encore testable |
+| 002 — page 1 mixte ≠ ouverture | verdict inversé `STOP` → `GO` | verdict reproductible sur deux passages identiques |
+| 003 — hors gabarit, l'origine décide | panier de 849 € emportant seul le choix | requête décisive convergée avec le choix humain |
+| 004 — plancher comparable | 17,70 € dans une bande à 210 € | plancher corrigé à 149 €, rapport ramené de ×12 à ×1,43 |
+
+Trois des quatre ont produit un changement de comportement mesuré. C'est la boucle décrite dans
+l'audit du 30/08 — observation, règle, re-test, stabilité — exécutée pour la première fois.
