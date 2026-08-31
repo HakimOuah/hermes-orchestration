@@ -262,3 +262,44 @@ Chacune est née d'une défaillance observée sur cette chaîne, a été écrite
 
 Trois des quatre ont produit un changement de comportement mesuré. C'est la boucle décrite dans
 l'audit du 30/08 — observation, règle, re-test, stabilité — exécutée pour la première fois.
+
+---
+
+# Addendum 5 — la boucle de contradiction, testée contre une vérité connue
+
+Le skill `contradiction` est soumis à quatre affirmations dont **je connais déjà le statut** : les
+trois défaillances mesurées plus haut, plus une affirmation vraie servant de témoin. Un
+démolisseur qui tue tout serait aussi inutile qu'un qui ne tue rien.
+
+| | Affirmation | Vérité | Verdict rendu | |
+|---|---|---|---|---|
+| A1 | Weeride tient les deux premières positions via 3 domaines | motif non vérifiable | `ne_tient_pas` | ✅ |
+| A2 | « mangeoire anti-nuisible poules » = 4 400/mois | vaut 480 | `ne_tient_pas` | ✅ |
+| A3 | plancher comparable = 17,70 € | c'est un accessoire | `ne_tient_pas` | ✅ |
+| A4 | « porte automatique poulailler » = 8 100/mois | **vrai** | **`tient`** | ✅ |
+
+**4 sur 4, et le témoin survit.** La boucle discrimine au lieu de démolir en bloc — c'était le
+risque principal.
+
+Arbitrage rendu : `VERDICT_SURVIT: NON`, au motif que *« A4 établit une demande, pas un verrou
+structurel ; les preuves de concentration, de volume adjacent et de prix plancher tombent »*. Le
+raisonnement est juste : la seule affirmation debout soutient la demande, pas la conclusion.
+
+**Coût** : 30 appels de sous-agents, **4 min 23 s** en temps mur grâce au parallélisme. Ordre de
+grandeur d'une mission complète — d'où la borne du skill : ne lancer la boucle que devant un
+engagement réel.
+
+## La limite, illustrée par la boucle elle-même
+
+Sur A1, le démolisseur affine : *« Weeride possède bien les trois domaines, mais Animal Valley
+n'occupe pas l'une des deux premières positions ; l'énoncé mélange trois domaines et deux places. »*
+Diagnostic plus fin que le contrôle manuel, qui concluait à un domaine vérifiable sur trois.
+
+**Cette précision n'a pas pu être confirmée** : aucune page de mentions légales atteignable sur
+`animalvalley.com` par les chemins usuels. Elle n'est pas fausse pour autant — le démolisseur a pu
+la trouver ailleurs — mais elle n'est pas établie.
+
+Enseignement : **la boucle relève le plancher, elle ne rend pas les affirmations
+auto-vérifiantes.** Un démolisseur produit lui aussi des affirmations, qui méritent la même
+discipline de preuve que celles qu'il examine. Ce n'est pas un défaut de conception, c'est la
+raison pour laquelle la décision finale reste humaine.
