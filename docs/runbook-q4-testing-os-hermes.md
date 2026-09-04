@@ -290,6 +290,47 @@ en conversation. Le kanban n'entre en service que sur une chaîne qui a tourné 
 
 ---
 
+## 7 bis. Résultat du test de fumée (nuit du 04 au 05/09)
+
+Chaîne C0 du rasoir de sûreté lancée par Hakim à 23h37 (`unblock`), terminée à 00h04 sans aucune
+intervention entre les cartes.
+
+| Carte | Profil | Modèle | Durée | Sortie |
+|---|---|---|---:|---|
+| Phase 4A sourcing exact | `oh-sourcing` | grok-4.6 | 9 min | `sourcing-exact.md`, `FOURNISSEUR À TESTER`, SKU 29,79 € livré FR 5–10 j, six PDP AliExpress lues en navigateur réel, confiance A |
+| Phase 5 économie | `oh-marge` | grok-4.6 | 8 min | `economie.md` + calculs reproductibles, `TECHNICAL_WATCH`, marge contributive et BE-CVR à 69 € et 99 € |
+| Audit contradicteur | `oh-contradicteur` | gpt-6-astra | 7 min | `contradiction.md`, NON RETENU en l'état (cas limite marché non levé), preuves recalculées, SHA vérifiés |
+
+Les cinq points de l'étape 6 passent : modèles corrects, `kanban_complete` avec chemin et branche à
+chaque carte, branches `agents/rasoir-*` sur GitHub sans toucher `main`, durées et sorties dans
+`hermes kanban runs`, aucun GO prononcé nulle part. Coût DataForSEO : 0 USD (aucun nouvel appel,
+les workers ont réutilisé les réponses du 03/09). Coût modèles : non exposé par Hermes, à
+instrumenter (`hermes insights`).
+
+**Trois leçons à appliquer avant la semaine 37.**
+
+1. **Espace de travail `dir:` = le worker fait son checkout dans ton dépôt.** Le repo
+   `boutique-pipeline` s'est retrouvé sur `agents/rasoir-contradiction-2026-09-04` jusqu'à ce que
+   Claude Code le remette sur `main`. Les trois branches se sont empilées proprement (contradiction
+   contient économie contient sourcing), mais toute autre session ouverte sur le dépôt aurait vu
+   la mauvaise branche. Pour les prochaines cartes : `--workspace worktree --branch agents/<mission>-<date>`,
+   ou `--project` après `hermes project` sur le dépôt. À tester sur une carte avant de généraliser.
+2. **Le contradicteur a lu la synthèse de phase 5 avant les preuves**, et l'a dit lui-même : la
+   carte dépendant de l'économie, le résumé de transmission était visible dès l'orientation. Pour
+   un audit vraiment aveugle, la carte contradicteur doit dépendre du **sourcing**, pas de
+   l'économie, et recevoir les chemins des rapports bruts seulement.
+3. **Un rôle porté peut être périmé sans que personne le voie.** Le contradicteur a relevé que
+   `critique-candidat.md` portait encore les seuils 10 000 / 30 000 (canoniques : 12 500 / 37 500
+   depuis le 29/08). Corrigé le 05/09 et reporté ; le rôle renvoie désormais au fichier de critères
+   au lieu de coder un chiffre.
+
+Une fausse piste à ne pas refaire : `reports/` est dans le `.gitignore` de `boutique-pipeline`.
+Les synthèses `phase4-*` et `phase5-*` que les workers y écrivent ne sont pas des oublis de commit,
+ce sont des copies locales ; les livrables versionnés sont ceux d'`analyses/`.
+
+Le dossier A6 lui-même reste `REVIEW_PREQUALIFICATION` : le `TECHNICAL_WATCH` économique n'écrase
+pas le cas limite marché, et la décision est celle de Hakim.
+
 ## 8. Ce qui reste hors de Hermes, et ce qu'on décide plus tard
 
 - **Google Ads et Merchant Center.** Aucun accès depuis Hermes. Les contrôles J+1/J+3/J+7 et le
