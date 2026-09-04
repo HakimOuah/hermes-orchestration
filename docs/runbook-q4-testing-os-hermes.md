@@ -7,7 +7,11 @@ La semaine v2 qu'il implémente est décrite dans
 `boutiques-drop/boutique-pipeline/plans/2026-09-04-audit-q4-testing-os.md`. Ce runbook ne porte
 aucune méthode métier : il dit qui tourne où, sur quel modèle, et par quel mécanisme.
 
-Rien de ce qui suit n'a été appliqué. Chaque étape est une commande à passer, dans l'ordre.
+**Journal d'application.** Étape 1 faite par Hakim le 04/09 (workers sur `grok-4.6`, contradicteur sur
+`gpt-6-astra`). Étapes 2 à 5 appliquées par Claude Code le 04/09 au soir ; les syntaxes ci-dessous
+sont celles qui ont réellement fonctionné (trois corrections par rapport à la première rédaction,
+signalées « corrigé le 04/09 »). Étape 6 (test de fumée) : à faire par Hakim — la chaîne C0 du
+rasoir existe sur le board, carte de tête **bloquée** `needs_input` `t_e820a54d`.
 
 ---
 
@@ -111,8 +115,23 @@ Réglages du profil manager :
 ```bash
 hermes -p oh-ventures config set kanban.orchestrator_profile oh-ventures
 hermes -p oh-ventures config set kanban.auto_decompose false
-hermes -p oh-ventures tools     # cocher le toolset `kanban` pour cli ET telegram
 ```
+
+**Corrigé le 04/09 — activer le toolset `kanban` sur le manager.** `hermes tools enable kanban`
+répond « Unknown toolset » : le toolset est gardé, il n'apparaît pas dans le sélecteur. La garde
+(`tools/kanban_tools.py`, `_profile_has_kanban_toolset`) lit une clé **de premier niveau**
+`toolsets:` dans la `config.yaml` du profil, et seul ce module lit cette clé. Il suffit donc
+d'ajouter dans `~/.hermes/profiles/oh-ventures/config.yaml` :
+
+```yaml
+toolsets:
+  - kanban
+```
+
+Les outils `kanban_create`, `kanban_list`, `kanban_link`, `kanban_unblock` apparaissent alors dans
+les sessions du profil (CLI, Telegram, cron). Ces réglages sont dans la config du **profil**, pas
+dans la config racine, qui sert DB-Industrie et garde son `auto_decompose` à vrai : ne jamais poser
+une carte OH en `triage`, c'est la seule colonne que le décomposeur générique touche.
 
 `auto_decompose: false` est important : le décomposeur intégré fabrique un graphe générique à
 partir des descriptions de profils. On veut que ce soit `@oh-ventures`, avec le skill
@@ -155,6 +174,19 @@ hermes kanban $B create "[C0] Audit contradicteur — rasoir de sûreté" $T \
       --body "Preuves brutes seulement : ne lis pas la synthèse de phase 5 avant d'avoir relu les rapports 3, 4A, 4B."
 ```
 
+**Corrigé le 04/09 — une carte créée est exécutée dans la minute.** `--initial-status blocked` ne
+tient pas : la carte a été promue et lancée par le dispatcher de la gateway au tick suivant
+(pid tué, réclamation levée à la main). Pour préparer une chaîne sans la lancer, créer les cartes
+puis bloquer la tête **immédiatement** avec le motif en positionnel, avant l'option :
+
+```bash
+hermes kanban --board oh-ventures-q4 block <id> "Motif du blocage" --kind needs_input
+hermes kanban --board oh-ventures-q4 unblock <id>      # quand Hakim lance
+```
+
+Les enfants liés par `--parent` restent en `todo` tant que le parent n'est pas `done` : seule la
+tête a besoin d'être bloquée.
+
 Une carte dont la qualité exige un modèle plus fort se surcharge à l'unité, sans changer le profil :
 
 ```bash
@@ -171,6 +203,13 @@ dépannage.
 
 Chaque job est pinned sur GPT (c'est le manager qui parle), livré dans le Bot Chat pour que Hakim
 le retrouve au même endroit, et tourne depuis `boutique-pipeline/` pour hériter d'`AGENTS.md`.
+
+**Corrigé le 04/09 — les deux positionnels (horaire, prompt) doivent précéder les options**, sinon
+`hermes: error: unrecognized arguments`. Forme qui marche :
+`hermes -p oh-ventures cron create "<cron>" "<prompt>" --name … --workdir … --model … --provider … --deliver …`.
+Les quatre jobs ci-dessous sont créés (prochains passages : samedi 05/09 8h, lundi 07/09 7h,
+jeudi 10/09 9h, vendredi 11/09 9h). Les prompts sont reproduits ici pour la forme ; l'ordre réel des
+arguments est celui de la note ci-dessus.
 
 ```bash
 WD="/Users/Hakim/Documents/Boutiques drop/boutique-pipeline"
@@ -200,7 +239,8 @@ pour un premier passage à la main.
 
 ## 6. Étape 5 — donner une identité au manager (`SOUL.md` de `oh-ventures`)
 
-À coller dans `~/.hermes/profiles/oh-ventures/SOUL.md` (ou Desktop → *Edit Profile* → SOUL) :
+Écrit le 04/09 dans `~/.hermes/profiles/oh-ventures/SOUL.md` (ancien texte conservé dans
+`SOUL.md.bak-2026-09-04`, config précédente dans `config.yaml.bak-2026-09-04`) :
 
 ```markdown
 # Identité
